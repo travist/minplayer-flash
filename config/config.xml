@@ -1,6 +1,5 @@
 <config>
    <settings>
-   	<file>http://drupal7/sites/default/files/Despicable Me.mp4</file>
    </settings>
    <plugins>
       <plugin>
