@@ -18,6 +18,7 @@
       </dependencies>
     </plugin>
     <plugin>
+      <definition>com.mediafront.display.media.controls.ControlBar</definition>
       <type>controlBar</type>
       <name>controlBar</name>
       <visible>false</visible>
