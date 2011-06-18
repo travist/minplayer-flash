@@ -1,0 +1,31 @@
+<config>
+   <settings>
+   	<file>http://drupal7/sites/default/files/Despicable Me.mp4</file>
+   </settings>
+   <plugins>
+      <plugin>
+         <definition>com.mediafront.display.media.MediaPlayer</definition>
+         <type>mediaPlayer</type>
+         <name>mediaPlayer</name>
+         <visible>true</visible>
+      </plugin>     
+      <plugin>
+         <definition>com.mediafront.display.media.controls.PlayLoader</definition>
+         <type>playLoader</type>
+         <name>playLoader</name>
+         <visible>true</visible>         
+         <dependencies>
+            <dependency>mediaPlayer</dependency>
+         </dependencies>
+      </plugin> 
+      <plugin>
+         <definition>com.mediafront.display.media.controls.ControlBar</definition>
+         <type>controlBar</type>
+         <name>controlBar</name>
+         <visible>true</visible>         
+         <dependencies>
+            <dependency>mediaPlayer</dependency>
+         </dependencies>
+      </plugin>          
+   </plugins>
+</config>
