@@ -48,7 +48,7 @@ package com.mediafront.display.media {
       connection.addEventListener(IOErrorEvent.IO_ERROR,errorHandler);
       connection.addEventListener(AsyncErrorEvent.ASYNC_ERROR,errorHandler);
       connection.client=this;
-      usingStream = (videoStream != null);
+      usingStream = !!videoStream;
       connection.connect( (videoStream ? videoStream : null) );
     }
 
