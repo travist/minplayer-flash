@@ -60,10 +60,9 @@ package com.mediafront.display.media {
 
       Utils.debug( "AudioPlayer: loadFile( " + file + ")", debug );
 
-      var request:URLRequest=new URLRequest(file);
-      request.requestHeaders.push( new URLRequestHeader("pragma", "no-cache") );
+      var req:URLRequest=new URLRequest(file);
       try {
-        super.load( request, context );
+        super.load(req, context);
         loadInterval=setInterval(loadHandler,200);
       } catch (error:Error) {
         Utils.debug("Unable to load " + file);
