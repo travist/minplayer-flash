@@ -65,7 +65,7 @@ package com.mediafront.display.media {
         super.load(req, context);
         loadInterval=setInterval(loadHandler,200);
       } catch (error:Error) {
-        Utils.debug("Unable to load " + file);
+        Utils.debug("Unable to load " + file + ": " + error.toString())
       }
     }
 

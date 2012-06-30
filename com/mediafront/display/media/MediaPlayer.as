@@ -230,21 +230,26 @@ package com.mediafront.display.media {
           preview.visible=true;
         }
 
+        // See if we should load a new player...
+        var shouldLoad:Boolean = (!loadedFile || (loadedFile.mediaType != mediaFile.mediaType));
+
         // Only load a new player if we must.
-        if ( !loadedFile || (loadedFile.mediaType != mediaFile.mediaType) ) {
-          switch ( mediaFile.mediaType ) {
+        switch ( mediaFile.mediaType ) {
             case "video" :
-              addVideo( new VideoPlayer( stage.stageWidth, stage.stageHeight, settings.debug, onMediaEvent) );
+              if (shouldLoad) {
+                addVideo( new VideoPlayer( stage.stageWidth, stage.stageHeight, settings.debug, onMediaEvent) );
+              }
               break;
-
+            
             case "swf" :
-              addVideo( new SWFPlayer(settings.debug, onMediaEvent) );
+              if (shouldLoad) {
+                addVideo( new SWFPlayer(settings.debug, onMediaEvent) );
+              }
               break;
-
+            
             case "audio" :
               media=new AudioPlayer(settings.debug,onMediaEvent);
               break;
-          }
         }
 
         if (media) {
