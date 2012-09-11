@@ -105,15 +105,16 @@ package com.mediafront.display.media {
         return channel.soundTransform.volume;
       }
 
-      return 0;
+      return vol;
     }
 
     public function setVolume(_vol:Number):void {
       Utils.debug( "AudioPlayer: setVolume( " + _vol + ")", debug );
+      vol = _vol;
       if (channel) {
         try {
           var transform:SoundTransform=channel.soundTransform;
-          transform.volume=vol=_vol;
+          transform.volume=_vol;
           channel.soundTransform=transform;
         } catch (e:Error) {
           Utils.debug( "ERROR: setVolume: " + e.toString() );
@@ -148,7 +149,7 @@ package com.mediafront.display.media {
         channel.addEventListener( Event.SOUND_COMPLETE, audioUpdate );
       }
 
-      setVolume( vol );
+      setVolume(vol);
       onMediaEvent( MediaEvent.PLAYING );
     }
 
