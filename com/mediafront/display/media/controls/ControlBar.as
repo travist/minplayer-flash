@@ -119,6 +119,10 @@ package com.mediafront.display.media.controls {
           totalTime=0;
           break;
         case MediaEvent.PLAYING :
+          var vol = components.mediaPlayer.getVolume();
+          if (vol) {
+            volumeBar.setValue(vol);
+          }
           updateTimer.start();
           setPlayState( true );
           break;
@@ -130,7 +134,10 @@ package com.mediafront.display.media.controls {
           progressTimer.stop();
           break;
         case MediaEvent.META :
-          volumeBar.setValue(components.mediaPlayer.getVolume());
+          var vol = components.mediaPlayer.getVolume();
+          if (vol) {
+            volumeBar.setValue(vol);
+          }
           updatePlayTime();
           break;
       }
