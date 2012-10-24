@@ -31,5 +31,6 @@ package com.mediafront.utils {
     public var mediaPlayer:String="mediaPlayer";
     public var stream:String=null;
     public var autostart:Boolean=false;
+    public var autoload:Boolean=true;
   }
 }

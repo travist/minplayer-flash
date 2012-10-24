@@ -99,7 +99,14 @@ package com.mediafront.display.media {
 
     public function playMedia():void {
       try {
-        if (media && loadedFile.loaded) {
+        if (media) {
+          if (!loadedFile.loaded) {
+            media.loadFile(loadedFile.path);
+          }
+          
+          // Set the autoload and autostart to true.
+          settings.autoload=true;
+          settings.autostart=true;
           media.playMedia();
         }
       } catch (e:Error) {
@@ -190,7 +197,9 @@ package com.mediafront.display.media {
     }
 
     private function onMediaConnected():void {
-      media.loadFile( loadedFile.path );
+      if (settings.autoload) {
+        media.loadFile(loadedFile.path);
+      }
     }
 
     private function onMediaPlaying():Boolean {
@@ -237,13 +246,13 @@ package com.mediafront.display.media {
         switch ( mediaFile.mediaType ) {
             case "video" :
               if (shouldLoad) {
-                addVideo( new VideoPlayer( stage.stageWidth, stage.stageHeight, settings.debug, onMediaEvent) );
+                addVideo(new VideoPlayer(stage.stageWidth, stage.stageHeight, settings.debug, onMediaEvent));
               }
               break;
             
             case "swf" :
               if (shouldLoad) {
-                addVideo( new SWFPlayer(settings.debug, onMediaEvent) );
+                addVideo(new SWFPlayer(settings.debug, onMediaEvent));
               }
               break;
             
