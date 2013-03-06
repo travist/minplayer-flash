@@ -172,12 +172,6 @@ package com.mediafront.display.media {
 
     public function onMediaEvent( type:String ):void {
       var dispatch:Boolean=true;
-
-      if (ExternalInterface.available&&settings) {
-        Utils.debug("Calling Flash Update: " + type, settings.debug );
-        ExternalInterface.call( "onFlashPlayerUpdate", settings.id, type );
-      }
-
       switch ( type ) {
         case MediaEvent.CONNECTED :
           onMediaConnected();
@@ -191,6 +185,11 @@ package com.mediafront.display.media {
       }
 
       if (dispatch) {
+        if (ExternalInterface.available && settings) {
+          Utils.debug("Calling Flash Update: " + type, settings.debug );
+          ExternalInterface.call("onFlashPlayerUpdate", settings.id, type);
+        }
+        
         // Now dispatch this event for everyone interested.
         dispatchEvent( new MediaEvent( type ) );
       }
