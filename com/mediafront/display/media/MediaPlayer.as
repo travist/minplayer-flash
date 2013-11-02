@@ -79,7 +79,8 @@ package com.mediafront.display.media {
     public function playMedia():void {
       try {
         if (media) {
-          if (!loadedFile.loaded) {
+          if (!loadedFile.loading) {
+            loadedFile.loading = true;
             media.loadFile(loadedFile.path);
           }
 
@@ -175,7 +176,8 @@ package com.mediafront.display.media {
     }
 
     private function onMediaConnected():void {
-      if (settings.autoload) {
+      if (settings.autoload && !loadedFile.loading) {
+        loadedFile.loading=true;
         media.loadFile(loadedFile.path);
       }
     }
