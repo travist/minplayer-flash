@@ -222,43 +222,46 @@ package com.mediafront.display.media {
         // See if we should load a new player...
         var shouldLoad:Boolean = (!loadedFile || (loadedFile.mediaType != mediaFile.mediaType));
 
-        // Only load a new player if we must.
-        switch ( mediaFile.mediaType ) {
-            case "video" :
-              if (shouldLoad) {
-                addVideo(new VideoPlayer(stage.stageWidth, stage.stageHeight, settings.debug, onMediaEvent));
-              }
-              break;
+        try {
+          // Only load a new player if we must.
+          switch ( mediaFile.mediaType ) {
+              case "video" :
+                if (shouldLoad) {
+                  media = null;
+                  addVideo(new VideoPlayer(stage.stageWidth, stage.stageHeight, settings.debug, onMediaEvent));
+                }
+                break;
 
-            case "swf" :
-              if (shouldLoad) {
-                addVideo(new SWFPlayer(settings.debug, onMediaEvent));
-              }
-              break;
+              case "swf" :
+                if (shouldLoad) {
+                  media = null;
+                  addVideo(new SWFPlayer(settings.debug, onMediaEvent));
+                }
+                break;
 
-            case "audio" :
-              media=new AudioPlayer(settings.debug,onMediaEvent);
-              break;
-        }
+              case "audio" :
+                media = null;
+                media=new AudioPlayer(settings.debug,onMediaEvent);
+                break;
+          }
 
-        if (media) {
-          try {
+          if (media) {
             media.addEventListener( MediaEvent.CONNECTED, onMediaEvent );
             media.addEventListener( MediaEvent.META, onMediaEvent );
             media.addEventListener( MediaEvent.BUFFERING, onMediaEvent );
             media.addEventListener( MediaEvent.PAUSED, onMediaEvent );
             media.addEventListener( MediaEvent.PLAYING, onMediaEvent );
             media.addEventListener( MediaEvent.COMPLETE, onMediaEvent );
-          } catch (error:Error) {
-            Utils.debug("An Error occurred: " + error.message + "\n");
           }
+
+          // Save the loaded file for later.
+          loadedFile=mediaFile;
+
+          // Connect to the media stream.
+          media.connect( mediaFile.stream );
+        } catch (error:Error) {
+          Utils.debug("An Error occurred: " + error.message + "\n");
         }
-
-        // Save the loaded file for later.
-        loadedFile=mediaFile;
-
-        // Connect to the media stream.
-        media.connect( mediaFile.stream );
       }
     }
 

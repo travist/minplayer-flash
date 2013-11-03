@@ -36,6 +36,7 @@
       duration=0;
       vol=0.8;
       loaded=false;
+      playing=false;
 
       Utils.debug( "AudioPlayer: loadFile( " + file + ")", debug );
 
@@ -60,7 +61,7 @@
         loaded=true;
         playMedia();
       }
-      clearInterval( loadInterval );
+      clearInterval(loadInterval);
     }
 
     public function audioUpdate( e:Object ):void {
@@ -71,6 +72,7 @@
           break;
 
         case Event.SOUND_COMPLETE :
+          playing=false;
           onMediaEvent( MediaEvent.COMPLETE );
           break;
       }
@@ -106,30 +108,38 @@
         try {
           channel.stop();
         } catch (e:Error) {
-          Utils.debug( e.toString() );
+          Utils.debug(e.toString());
         }
       }
-      clearInterval( loadInterval );
+      playing=false;
       SoundMixer.stopAll();
     }
 
-    public function playMedia( setPos:Number = -1 ):void {
-      var newPos = (setPos >= 0) ? setPos : position;
-      Utils.debug( "AudioPlayer: playMedia( " + newPos + ")", debug );
+    public function playMedia(setPos:Number = -1):void {
+      // Only play if we are not playing or are seeking to a new position.
+      if (!playing || (setPos >= 0)) {
+      
+        // Get the new position to play.
+        var newPos = (setPos >= 0) ? setPos : position;
+        Utils.debug( "AudioPlayer: playMedia( " + newPos + ")", debug );
 
-      try {
-        channel=super.play(newPos);
-      } catch (e:Error) {
-        Utils.debug( e.toString() );
+        try {
+          stopChannel();
+          playing=true;
+          channel=super.play(newPos);
+        } catch (e:Error) {
+          Utils.debug(e.toString());
+        }
+
+        if (channel) {
+          channel.removeEventListener( Event.SOUND_COMPLETE, audioUpdate );
+          channel.addEventListener( Event.SOUND_COMPLETE, audioUpdate );
+        }
+
+        setVolume(vol);
       }
-
-      if (channel) {
-        channel.removeEventListener( Event.SOUND_COMPLETE, audioUpdate );
-        channel.addEventListener( Event.SOUND_COMPLETE, audioUpdate );
-      }
-
-      setVolume(vol);
-      onMediaEvent( MediaEvent.PLAYING );
+      
+      onMediaEvent(MediaEvent.PLAYING);
     }
 
     public function pauseMedia():void {
@@ -162,20 +172,13 @@
 
     public function seekMedia( pos:Number ):void {
       if (channel) {
-        stopChannel();
         Utils.debug( "AudioPlayer: seekMedia( " + pos + ")", debug );
         playMedia((pos * 1000));
       }
     }
 
     public function getDuration():Number {
-      var _duration:Number=duration;
-      if (this.bytesLoaded>=this.bytesTotal) {
-        duration=_duration=this.length/1000;
-      } else if ( !duration && this.length && (this.bytesLoaded > 0) && (this.bytesTotal > 0) ) {
-        duration = _duration = (uint(this.length/2) / uint(this.bytesLoaded/2)) * (this.bytesTotal / 1000);
-      }
-      return _duration;
+      return (this.length / 1000);
     }
 
     public function getCurrentTime():Number {
@@ -201,6 +204,7 @@
     public var duration:Number=0;
     public var position:Number=0;
     public var loaded:Boolean=false;
+    public var playing:Boolean=false;
     public var debug:Boolean=false;
     public var vol:Number=0.8;
     public var onMediaEvent:Function=null;
